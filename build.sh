@@ -24,7 +24,7 @@ Info "Building Docker image ${TAG}"
 docker build --tag="${TAG}" .
 
 id=$(docker create "${TAG}")
-docker cp $id:/opt/nginx-$TAG.tar - > local.tar
+docker cp $id:/opt/nginx-$TAG.tar local.tar
 docker rm -v $id
 
 Info "Removing Dockerfile"
@@ -41,6 +41,6 @@ sudo apt-get -qq install python-swiftclient
 
 Info "Starting upload"
 
-swift upload apt *.deb
+swift upload apt opt/*.deb
 
 Info "Upload success"

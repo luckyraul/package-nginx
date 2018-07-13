@@ -5,7 +5,7 @@ WORKDIR /opt/
 RUN dget -x "http://http.debian.net/debian/pool/main/n/nginx/nginx_${SOURCE}.dsc"
 WORKDIR /opt/nginx-$TAG
 RUN mk-build-deps --install --remove --tool "apt-get -qq"
-RUN dch -l mygento --distribution stretch-backports "Rebuild with Pagespeed, brotli"
+RUN dch -l mygento --distribution stretch-backports "Rebuild with Pagespeed, brotli, Mod Security"
 RUN ls -lha ../
 
 WORKDIR /opt/nginx-$TAG/debian/modules
@@ -32,6 +32,16 @@ RUN git clone --depth=1 https://github.com/google/ngx_brotli.git && cd ngx_brotl
   git submodule init && git submodule update && \
   rm -fR deps/brotli/tests deps/brotli/research/img deps/brotli/java deps/brotli/docs/brotli-comparison-study-2015-09-22.pdf && \
   sed -i "s|--with-stream_ssl_module|--with-stream_ssl_module --add-dynamic-module=\$(MODULESDIR)/ngx_brotli|" /opt/nginx-$TAG/debian/rules
+
+  # WAF mod Security
+RUN apt-get -qq update && apt-get install -qq libcurl4-gnutls-dev
+RUN git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity /opt/ModSecurity && cd /opt/ModSecurity && \
+    git submodule init && git submodule update && \
+    ./build.sh && ./configure && \
+    make && make install
+RUN git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git nginx_modsecurity && \
+    sed -i "s|--with-stream=dynamic|--with-stream=dynamic --add-dynamic-module=\$(MODULESDIR)/nginx_modsecurity|" /opt/nginx-$TAG/debian/rules
+
 
 # build
 WORKDIR /opt/nginx-$TAG
