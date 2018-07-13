@@ -32,6 +32,15 @@ rm -f Dockerfile
 
 ls -lah .
 
-sudo apt-get install --yes --no-install-recommends autopkgtest autodep8
+tar -xvf local.tar
+
+ls -lah .
 
 Info "Build successful"
+sudo apt-get -qq install python-swiftclient
+
+Info "Starting upload"
+
+swift upload apt *.deb
+
+Info "Upload success"
