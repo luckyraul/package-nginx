@@ -1,15 +1,14 @@
 FROM debian:stretch-backports
 ENV DEBIAN_FRONTEND=noninteractive TAG=1.13.3 SOURCE=1.13.3-1~bpo9+1 NPS_VERSION=1.13.35.2
 RUN apt-get -qqy update && apt-get install -qq packaging-dev debian-keyring devscripts equivs perl
+
 WORKDIR /opt/
 RUN dget -x "http://http.debian.net/debian/pool/main/n/nginx/nginx_${SOURCE}.dsc"
 WORKDIR /opt/nginx-$TAG
 RUN mk-build-deps --install --remove --tool "apt-get -qq"
-RUN dch -l mygento --distribution stretch-backports "Rebuild with Pagespeed, brotli, Mod Security"
-RUN ls -lha ../
+#RUN dch -l mygento --distribution stretch-backports "Rebuild with Pagespeed, brotli, Mod Security"
 
 WORKDIR /opt/nginx-$TAG/debian/modules
-
 # RUN apt-get install -qqy mc nano
 
 # BROTLI
@@ -62,7 +61,7 @@ Description: Pagespeed for Nginx\n'\
 
 
 # WAF mod Security
-RUN apt-get -qq update && apt-get install -qq libcurl4-gnutls-dev
+RUN apt-get -qq update && apt-get install -qq g++ flex bison curl doxygen libyajl-dev libgeoip-dev libtool dh-autoreconf liblmdb-dev libcurl4-gnutls-dev libxml2 zlib1g-dev libpcre++-dev libxml2-dev
 RUN git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity ModSecurity && cd ModSecurity && \
     git submodule init && git submodule update && \
     ./build.sh && ./configure && \
@@ -78,9 +77,10 @@ RUN git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git ngin
     sed -i "s|--with-stream=dynamic|--with-stream=dynamic --add-dynamic-module=\$(MODULESDIR)/nginx_modsecurity|" /opt/nginx-$TAG/debian/rules && \
     sed -i "s|http-image-filter|http-image-filter http-modsecurity|" /opt/nginx-$TAG/debian/rules
 ADD packages/package.nginx /opt/nginx-$TAG/debian/libnginx-mod-http-modsecurity.nginx
-RUN echo 'debian/modules/ModSecurity/src/.libs/libmodsecurity.so /usr/lib' > /opt/nginx-$TAG/debian/libnginx-mod-http-modsecurity.install # && \
-    #echo 'debian/modules/ModSecurity/src/.libs/libmodsecurity.so.3 /usr/lib' >> /opt/nginx-$TAG/debian/libnginx-mod-http-modsecurity.install && \
-    #echo 'debian/modules/ModSecurity/src/.libs/libmodsecurity.so.3.0.2 /usr/lib' >> /opt/nginx-$TAG/debian/libnginx-mod-http-modsecurity.install
+RUN echo 'debian/modules/ModSecurity/src/.libs/libmodsecurity.so /usr/lib' > /opt/nginx-$TAG/debian/libnginx-mod-http-modsecurity.install
+# && \
+#echo 'debian/modules/ModSecurity/src/.libs/libmodsecurity.so.3 /usr/lib' >> /opt/nginx-$TAG/debian/libnginx-mod-http-modsecurity.install && \
+#echo 'debian/modules/ModSecurity/src/.libs/libmodsecurity.so.3.0.2 /usr/lib' >> /opt/nginx-$TAG/debian/libnginx-mod-http-modsecurity.install
 RUN printf '\n\
 Package: libnginx-mod-http-modsecurity\n\
 Architecture: any\n\
@@ -92,4 +92,4 @@ Description: ModSecurity support for Nginx\n'\
 WORKDIR /opt/nginx-$TAG
 RUN dpkg-buildpackage -us -uc
 
-RUN rm ../*-dbgsym*.deb && tar -czvf /opt/nginx-$TAG.tar /opt/libnginx-mod-*.deb /opt/nginx-extras_${SOURCE}mygento1_amd64.deb /opt/nginx-common_${SOURCE}mygento1_all.deb
+RUN rm ../*-dbgsym*.deb && tar -czvf /opt/nginx-$TAG.tar /opt/libnginx-mod-http-modsecurity_*.deb /opt/libnginx-mod-http-brotli-*.deb /opt/libnginx-mod-pagespeed_*.deb
