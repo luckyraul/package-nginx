@@ -10,7 +10,7 @@ RUN ls -lha ../
 
 WORKDIR /opt/nginx-$TAG/debian/modules
 
-RUN apt-get install -qqy mc nano
+# RUN apt-get install -qqy mc nano
 
 # PAGESPEED
 RUN apt-get -qqy update && apt-get install -qqy build-essential zlib1g-dev libpcre3 libpcre3-dev unzip uuid-dev
@@ -28,10 +28,23 @@ RUN wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSIO
   sed -i "s|--with-stream_ssl_preread_module|--with-stream_ssl_preread_module --add-dynamic-module=\$(MODULESDIR)/ngx_pagespeed|" /opt/nginx-$TAG/debian/rules
 
 # BROTLI
+ADD packages/brotli.nginx /opt/nginx-$TAG/debian/libnginx-mod-http-brotli.nginx
 RUN git clone --depth=1 https://github.com/google/ngx_brotli.git && cd ngx_brotli && \
   git submodule init && git submodule update && \
   rm -fR deps/brotli/tests deps/brotli/research/img deps/brotli/java deps/brotli/docs/brotli-comparison-study-2015-09-22.pdf && \
+  echo 'load_module modules/ngx_http_brotli_module.so;' > /opt/nginx-$TAG/debian/libnginx-mod.conf/mod-http-brotli.conf && \
   sed -i "s|--with-stream_ssl_module|--with-stream_ssl_module --add-dynamic-module=\$(MODULESDIR)/ngx_brotli|" /opt/nginx-$TAG/debian/rules
+RUN printf '\n\
+Package: libnginx-mod-http-brotli\n\
+Architecture: any\n\
+Depends: ${misc:Depends}, ${shlibs:Depends}\n\
+Description: brotli compression support for Nginx\n\
+ Brotli is a generic-purpose lossless compression algorithm that compresses data\n\
+ using a combination of a modern variant of the LZ77 algorithm, Huffman coding\n\
+ and 2nd order context modeling, with a compression ratio comparable to the best\n\
+ currently available general-purpose compression methods. It is similar in speed\n\
+ with deflate but offers more dense compression.\n\n'\
+>> /opt/nginx-$TAG/debian/control
 
   # WAF mod Security
 RUN apt-get -qq update && apt-get install -qq libcurl4-gnutls-dev
@@ -45,10 +58,8 @@ RUN git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git ngin
 
 # build
 WORKDIR /opt/nginx-$TAG
-RUN fakeroot debian/rules binary
-# RUN ls -lha ../
 
 # package
-RUN dpkg-buildpackage -us -uc
+RUN dpkg-buildpackage -us -uc -b
 
 RUN rm ../*-dbgsym*.deb && tar -czvf /opt/nginx-$TAG.tar /opt/libnginx-mod-*.deb /opt/nginx-extras_${SOURCE}mygento1_amd64.deb /opt/nginx-common_${SOURCE}mygento1_all.deb
