@@ -37,4 +37,4 @@ Description: brotli compression support for Nginx\n'\
 WORKDIR /opt/nginx-$TAG
 RUN dpkg-buildpackage -us -uc
 
-RUN rm ../*-dbgsym*.deb && tar -czvf /opt/nginx-$TAG.tar /opt/libnginx-mod-http-brotli-*.deb
+RUN rm ../*-dbgsym*.deb && tar -czvf /opt/nginx-$TAG.tar -C /opt libnginx-mod-http-brotli-*.deb
