@@ -13,7 +13,7 @@ Indent () {
   sed -e 's@^@  @g' "${@}"
 }
 
-TAG="1.13.3"
+TAG="1.14.0"
 
 Info "Starting build of NGINX ${TAG} using travis"
 
