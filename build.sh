@@ -36,7 +36,7 @@ tar -xvf local.tar -C packages
 ls -lah packages
 
 Info "Build successful"
-sudo apt-get -q update && apt-get -qq install python-swiftclient
+sudo apt-get -q update && sudo apt-get -qq install python-swiftclient
 
 Info "Starting upload"
 swift upload apt-manager packages/*.deb
