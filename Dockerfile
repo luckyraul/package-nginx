@@ -1,5 +1,5 @@
 FROM debian:stretch-backports
-ENV DEBIAN_FRONTEND=noninteractive TAG=1.14.0 SOURCE=1.14.0-1~bpo9+1
+ENV DEBIAN_FRONTEND=noninteractive TAG=1.14.1 SOURCE=1.14.1-1~bpo9+1
 RUN apt-get -qqy update && apt-get install -qq packaging-dev debian-keyring devscripts equivs perl
 
 WORKDIR /opt/
