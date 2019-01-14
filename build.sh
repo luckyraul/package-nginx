@@ -13,7 +13,7 @@ Indent () {
   sed -e 's@^@  @g' "${@}"
 }
 
-TAG="1.13.3"
+TAG="1.14.1"
 
 Info "Starting build of NGINX ${TAG} using travis"
 
@@ -30,17 +30,15 @@ docker rm -v $id
 Info "Removing Dockerfile"
 rm -f Dockerfile
 
-ls -lah .
+mkdir -p packages
+tar -xvf local.tar -C packages
 
-tar -xvf local.tar
-
-ls -lah .
+ls -lah packages
 
 Info "Build successful"
-sudo apt-get -qq install python-swiftclient
+sudo apt-get -q update && sudo apt-get -qq install python-swiftclient
 
 Info "Starting upload"
-
-swift upload apt opt/*.deb
+swift upload apt-manager packages/*.deb
 
 Info "Upload success"
