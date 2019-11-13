@@ -37,7 +37,6 @@ Info "Build successful"
 sudo apt-get -q update && sudo apt-get -qq install python-swiftclient
 
 Info "Starting upload"
-printenv
 swift upload apt-manager packages/*.deb
 
 Info "Upload success"

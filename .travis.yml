@@ -6,8 +6,6 @@ script:
 - sh build.sh
 if: tag IS blank
 env:
-  global:
-    secure: LeCFLBjlB7WMFnMasNoGyEzRseR/Y/srRSgetiTI96V2zHTKNyoyDDkDLDn8cXE1OoiRizzOkY1NdJ/jimxg4sq7FgzOt0vA9wQgzAABnvA3pBjUwKo1kG6uZ7ha7SOKeLbO2FIU0AOeo0uxWsCTv/wwj8fmvSsTYzuNRUgN0Gbvf6TabMNvXM83zZOFQVE//AU+eqGERS3UTWl+CX2b0ld5+tUoBgmpxXM0DiEHnjIwcNKZL3kvNE0NlYu8vvnO2Le1XmnOBbOZs6GXIdnJ/3eaNBjQaGI4HKGHRACb3dFu2KTTg4VLCrt01N+SATZQNo0QfNIJ9Y7p/b5SDq69BvJLnlLTGdrHFt8ATlmIz+8MHMqds69KFCxEFy86QOaR0MncnQMwJzHbnM3DcQgN3CWtJbSFzISrJCGJ0ghjr1Mds8IscKb8GrpmZEHbmBpLXW1mXsIzZOqnKDQajnX3MJMHyaxti578f+ro0+H2l3dFjWpLioDSELoQSqng5/BhCuZ+WKEZLGICUbyRkU1Qbbcngm3QNpo6QQRInOZ18iuaE1EDKmaU/k/UhuBSqz2HIdEm9hy29j9RuwcaNrXkYpAhHboHCtDW7Narqex5lhPnxafF78UTaXUSSWdyE2/wzCvfd6dhDM4FHbmRyjStpnvijpKXphLpjyLp6dDgQUs=
   jobs:
     - DEBIAN=stretch-backports TAG=1.14.1 SOURCE=1.14.1-1~bpo9+1
     - DEBIAN=buster TAG=1.14.2 SOURCE=1.14.2-2+deb10u1
