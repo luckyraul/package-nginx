@@ -19,7 +19,7 @@ Info "Using Dockerfile:"
 Indent Dockerfile
 
 Info "Building Docker image ${TAG}"
-docker build --tag="${TAG}" .
+docker build --tag="${TAG}" --build-arg TAG="${TAG}" --build-arg SOURCE="${SOURCE}" .
 
 id=$(docker create "${TAG}")
 docker cp $id:/opt/nginx-$TAG.tar local.tar
