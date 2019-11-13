@@ -19,7 +19,7 @@ Info "Using Dockerfile:"
 Indent Dockerfile
 
 Info "Building Docker image ${TAG} for ${DEBIAN}"
-docker build --tag="${TAG}" --build-arg TAG="${TAG}" --build-arg SOURCE="${SOURCE}" .
+docker build --tag="${TAG}" --build-arg DTAG="${TAG}" --build-arg SOURCE="${SOURCE}" .
 
 id=$(docker create "${TAG}")
 docker cp $id:/opt/nginx-$TAG.tar local.tar
@@ -37,6 +37,7 @@ Info "Build successful"
 sudo apt-get -q update && sudo apt-get -qq install python-swiftclient
 
 Info "Starting upload"
+printenv
 swift upload apt-manager packages/*.deb
 
 Info "Upload success"
