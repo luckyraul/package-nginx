@@ -18,7 +18,7 @@ Info "Starting build of NGINX ${TAG} using travis for ${DEBIAN}"
 Info "Using Dockerfile:"
 Indent Dockerfile
 
-Info "Building Docker image ${TAG}"
+Info "Building Docker image ${TAG} for ${DEBIAN}"
 docker build --tag="${TAG}" --build-arg TAG="${TAG}" --build-arg SOURCE="${SOURCE}" .
 
 id=$(docker create "${TAG}")
