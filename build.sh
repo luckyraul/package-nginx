@@ -13,15 +13,13 @@ Indent () {
   sed -e 's@^@  @g' "${@}"
 }
 
-TAG="1.14.1"
-
-Info "Starting build of NGINX ${TAG} using travis"
+Info "Starting build of NGINX ${TAG} using travis for ${DEBIAN}"
 
 Info "Using Dockerfile:"
 Indent Dockerfile
 
-Info "Building Docker image ${TAG}"
-docker build --tag="${TAG}" .
+Info "Building Docker image ${TAG} for ${DEBIAN}"
+docker build --tag="${TAG}" --build-arg DTAG="${TAG}" --build-arg SOURCE="${SOURCE}" .
 
 id=$(docker create "${TAG}")
 docker cp $id:/opt/nginx-$TAG.tar local.tar
