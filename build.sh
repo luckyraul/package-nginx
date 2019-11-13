@@ -13,9 +13,7 @@ Indent () {
   sed -e 's@^@  @g' "${@}"
 }
 
-TAG="1.14.1"
-
-Info "Starting build of NGINX ${TAG} using travis"
+Info "Starting build of NGINX ${TAG} using travis for ${DEBIAN}"
 
 Info "Using Dockerfile:"
 Indent Dockerfile
