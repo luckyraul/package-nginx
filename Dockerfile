@@ -6,7 +6,8 @@ ARG SOURCE=1.14.2-2+deb10u1
 
 ENV DEBIAN_FRONTEND=noninteractive TAG=${DTAG} SOURCE=${SOURCE}
 
-RUN echo "Building Docker image ${DTAG} for ${DEBIAN} with source ${SOURCE}"
+RUN VER=$(cat /etc/debian_version) && \
+    echo "Building Docker image ${DTAG} for ${DEBIAN}:${VER} with source ${SOURCE}"
 
 RUN apt-get -qqy update && apt-get install -qq packaging-dev debian-keyring devscripts equivs perl
 
