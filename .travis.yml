@@ -7,5 +7,5 @@ script:
 if: tag IS blank
 env:
   jobs:
-    - DEBIAN=stretch-backports TAG=1.14.1 SOURCE=1.14.1-1~bpo9+1
-    - DEBIAN=buster TAG=1.14.2 SOURCE=1.14.2-2+deb10u1
+    - DEBIAN=stretch-backports TAG=1.14.1 SOURCE=1.14.1-1~bpo9+1 DEPLOYER=v1-full
+    - DEBIAN=buster TAG=1.14.2 SOURCE=1.14.2-2+deb10u1 DEPLOYER=v2

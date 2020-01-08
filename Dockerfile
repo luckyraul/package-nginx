@@ -1,5 +1,5 @@
-ARG DEBIAN=buster
-FROM debian:${DEBIAN}
+ARG DEPLOYER=v2
+FROM mygento/deployer:${DEPLOYER}
 
 ARG DTAG=1.14.2
 ARG SOURCE=1.14.2-2+deb10u1
