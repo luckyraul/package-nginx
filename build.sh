@@ -31,9 +31,12 @@ rm -f Dockerfile
 mkdir -p packages
 tar -xvf local.tar -C packages
 
+Info "Build result"
 ls -lah packages
 
 Info "Build successful"
+docker run --rm -ti -v $(pwd)/packages:/root/packages mygento/deployer:v2 ls -lah /root/packages
+
 sudo apt-get -q update && sudo apt-get -qq install python-swiftclient
 
 Info "Starting upload"
