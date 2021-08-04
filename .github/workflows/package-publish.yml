@@ -1,0 +1,44 @@
+name: Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - brotli
+      - modsecurity
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ["buster", "bullseye"]
+        include:
+          - version: "buster"
+            tag: 1.14.2
+            source: 1.14.2-2+deb10u4
+            experimental: false
+          - version: "bullseye"
+            tag: 1.18.0
+            source: 1.18.0-6.1
+            experimental: true
+    steps:
+        - name: Checkout Project
+          uses: actions/checkout@v1
+        - name: Build
+          run: sh build.sh
+          env:
+            DEBIAN: ${{ matrix.version }}
+            TAG: ${{ matrix.tag }}
+            SOURCE: ${{ matrix.source }}
+        - name: Results
+          run: ls -lah packages
+        - name: Upload
+          run: sh upload.sh
+          env:
+            SERVICE: ${{ secrets.SERVICE }}
+            REALM: ${{ secrets.REALM }}
+            REALM_LOGIN: ${{ secrets.REALM_LOGIN }}
+            REALM_PASS: ${{ secrets.REALM_PASS }}
