@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["buster", "bullseye"]
+        version: ["buster","bullseye","bookworm"]
         include:
           - version: "buster"
             tag: 1.14.2
@@ -22,7 +22,11 @@ jobs:
             experimental: false
           - version: "bullseye"
             tag: 1.18.0
-            source: 1.18.0-6.1
+            source: 1.18.0-6.1+deb11u2
+            experimental: true
+          - version: "bookworm"
+            tag: 1.22.0
+            source: 1.22.0-1
             experimental: true
     steps:
         - name: Checkout Project
