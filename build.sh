@@ -19,6 +19,7 @@ Info "Using Dockerfile:"
 Indent Dockerfile
 
 Info "Building Docker image ${TAG} for ${DEBIAN}"
+sed -i "s/{IMAGE}/${DEBIAN}/g" Dockerfile
 docker build --tag="${TAG}" --build-arg DTAG="${TAG}" --build-arg SOURCE="${SOURCE}" .
 
 id=$(docker create "${TAG}")
